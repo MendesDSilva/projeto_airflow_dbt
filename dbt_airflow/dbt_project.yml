@@ -1,0 +1,34 @@
+name: 'dbt_airflow'
+version: '1.0.0'
+
+profile: 'dbt_airflow'
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+clean-targets:        
+  - "dbt_packages"
+
+models:
+  dbt_airflow:
+   
+    staging:
+      schema: stg
+      materializated: table
+      tags: ['staging']
+
+    intermediate:
+      schema: int
+      materializated: ephemeral
+      tags: ['intermediate']
+
+    marts:
+      schema: marts
+      materializated: table
+      tags: ['marts']
+
+    
