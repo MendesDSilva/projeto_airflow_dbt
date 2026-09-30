@@ -17,18 +17,18 @@ models:
   dbt_airflow:
    
     staging:
-      schema: stg
-      materialized: table
-      tags: ['staging']
+      +schema: stg
+      +materialized: view
+      +tags: ['staging']
 
     intermediate:
-      schema: int
-      materialized: ephemeral
-      tags: ['intermediate']
+      +schema: int
+      +materialized: ephemeral
+      +tags: ['intermediate']
 
     marts:
-      schema: marts
-      materialized: table
-      tags: ['marts']
+      +schema: marts
+      +materialized: incremental
+      +tags: ['marts']
 
     
