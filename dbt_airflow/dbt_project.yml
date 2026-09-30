@@ -18,17 +18,17 @@ models:
    
     staging:
       schema: stg
-      materializated: table
+      materialized: table
       tags: ['staging']
 
     intermediate:
       schema: int
-      materializated: ephemeral
+      materialized: ephemeral
       tags: ['intermediate']
 
     marts:
       schema: marts
-      materializated: table
+      materialized: table
       tags: ['marts']
 
     
