@@ -36,7 +36,9 @@ vendas as (
         i.preco_unitario,
         {{ generate_surrogate_key(
             ['p.id_pedido', 'i.produto_id']
-        ) }} as venda_id
+        ) }} as venda_id,
+
+        {{ audit_columns() }}
 
     from pedidos p
 
