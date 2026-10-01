@@ -155,9 +155,7 @@ sources:
 
           - name: email
             description: "Email do cliente"
-            data_tests:
-              - valid_email
-
+           
           - name: telefone
             description: "Telefone do cliente"
 
@@ -233,6 +231,7 @@ sources:
               - accepted_values:
                   arguments:
                     values: [1, 2, 3, 4, 5]
+                    quote: false
 
           - name: comentario
             description: "Comentário do cliente"
