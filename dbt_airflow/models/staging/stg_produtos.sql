@@ -4,7 +4,7 @@ with source as (
         , lower(trim(nome)) as nome 
         , lower(trim(descricao)) as descricao
         , cast(categoria_id as int64) as categoria_id
-        , cast(preco as int64) as preco
+        , cast(preco as numeric) as preco
         , lower(trim(marca)) as marca
         , cast(estoque as int64) as estoque
         , cast(data_cadastro as date) as data_cadastro
