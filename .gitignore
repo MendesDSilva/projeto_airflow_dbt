@@ -1,7 +1,14 @@
-.venv
+# Python
 venv/
+.venv/
+
+# dbt
 target/
 dbt_packages/
 logs/
+
+# Variáveis de ambiente
 .env
 
+# Credenciais
+*.json

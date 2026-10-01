@@ -8,4 +8,6 @@ dbt_airflow:
       project: dbt-project-508815
       dataset: "{{ env_var('DBT_DBNAME', 'dbt_airflow_dw') }}"
       threads: 4
-      keyfile: /mnt/c/mentoria/dbt/dbt-project-508815-2d729b436816.json
+      keyfile: "{{ env_var('GCP_KEYFILE_PATH') }}"
+
+   
