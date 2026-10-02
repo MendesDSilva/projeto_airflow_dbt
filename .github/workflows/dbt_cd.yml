@@ -1,0 +1,25 @@
+name: dbt CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  dbt-delivery:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Prepare dbt project
+        run: |
+          mkdir -p delivery
+          cp -r dbt_airflow delivery/  
+      
+      - name: Upload dbt artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dbt-production
+          path: delivery/dbt_airflow
