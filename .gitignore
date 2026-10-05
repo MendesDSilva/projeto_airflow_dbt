@@ -12,3 +12,10 @@ logs/
 
 # Credenciais
 *.json
+
+# Astro local
+.astro/
+
+# Python cache
+__pycache__/
+*.pyc

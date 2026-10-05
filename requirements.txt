@@ -1,2 +1,2 @@
-dbt-core
-dbt-bigquery
+astronomer-cosmos
+apache-airflow-providers-google
