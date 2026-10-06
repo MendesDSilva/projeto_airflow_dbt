@@ -31,3 +31,21 @@ jobs:
         with:
           name: airflow-dbt-production
           path: delivery
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build Docker image
+        run: |
+          docker build \
+            -t mendesdsilva/airflow-dbt:latest \
+            -t mendesdsilva/airflow-dbt:${{ github.sha }} \
+            .
+
+      - name: Push Docker image
+        run: |
+          docker push mendesdsilva/airflow-dbt:latest
+          docker push mendesdsilva/airflow-dbt:${{ github.sha }}
