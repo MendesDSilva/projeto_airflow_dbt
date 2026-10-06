@@ -432,3 +432,9 @@ Versionamento por commit SHA   ✅
 ```
 
 O projeto implementa **Continuous Delivery**. O deploy automático da imagem em uma infraestrutura remota de produção não faz parte do escopo atual.
+## 📚 Documentação dbt
+
+A documentação técnica do projeto, incluindo modelos, dependências, testes e lineage, é gerada automaticamente pelo dbt e publicada através do GitHub Pages.
+
+🔗 [Acessar dbt Docs](https://mendesdsilva.github.io/projeto_airflow_dbt/)
+
