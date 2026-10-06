@@ -40,6 +40,18 @@ jobs:
       - name: dbt test
         run: dbt test --project-dir dbt_airflow --profiles-dir dbt_airflow
 
+      - name: Generate dbt Docs
+        run: dbt docs generate --project-dir dbt_airflow --profiles-dir dbt_airflow
+
+      - name: Upload dbt Docs artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dbt-docs
+          path: |
+            dbt_airflow/target/index.html
+            dbt_airflow/target/manifest.json
+            dbt_airflow/target/catalog.json
+
   airflow-ci:
     runs-on: ubuntu-latest
 
