@@ -14,7 +14,8 @@ logs/
 *.json
 
 # Astro local
-.astro/
+.astro/*
+!.astro/config.yaml
 
 # Python cache
 __pycache__/
