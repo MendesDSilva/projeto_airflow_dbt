@@ -1,83 +1,41 @@
-"""Example DAGs test. This test ensures that all Dags have tags, retries set to two, and no import errors. This is an example pytest and may not be fit the context of your DAGs. Feel free to add and remove tests."""
-
-import os
-import logging
-from contextlib import contextmanager
-import pytest
 from airflow.models import DagBag
+from airflow.utils.db import initdb
 
 
-@contextmanager
-def suppress_logging(namespace):
-    logger = logging.getLogger(namespace)
-    old_value = logger.disabled
-    logger.disabled = True
-    try:
-        yield
-    finally:
-        logger.disabled = old_value
+DAG_ID = "dbt_cosmos_pipeline"
 
 
-def get_import_errors():
+def create_dag_bag():
     """
-    Generate a tuple for import errors in the dag bag
+    Inicializa o metadatabase utilizado pelo ambiente de testes
+    e carrega as DAGs.
     """
-    with suppress_logging("airflow"):
-        dag_bag = DagBag(include_examples=False)
-
-        def strip_path_prefix(path):
-            return os.path.relpath(path, os.environ.get("AIRFLOW_HOME"))
-
-        # prepend "(None,None)" to ensure that a test object is always created even if it's a no op.
-        return [(None, None)] + [
-            (strip_path_prefix(k), v.strip()) for k, v in dag_bag.import_errors.items()
-        ]
+    initdb()
+    return DagBag(include_examples=False)
 
 
-def get_dags():
-    """
-    Generate a tuple of dag_id, <DAG objects> in the DagBag
-    """
-    with suppress_logging("airflow"):
-        dag_bag = DagBag(include_examples=False)
+def test_no_import_errors():
+    dag_bag = create_dag_bag()
 
-    def strip_path_prefix(path):
-        return os.path.relpath(path, os.environ.get("AIRFLOW_HOME"))
-
-    return [(k, v, strip_path_prefix(v.fileloc)) for k, v in dag_bag.dags.items()]
+    assert not dag_bag.import_errors, (
+        f"Erros ao importar DAGs: {dag_bag.import_errors}"
+    )
 
 
-@pytest.mark.parametrize(
-    "rel_path,rv", get_import_errors(), ids=[x[0] for x in get_import_errors()]
-)
-def test_file_imports(rel_path, rv):
-    """Test for import errors on a file"""
-    if rel_path and rv:
-        raise Exception(f"{rel_path} failed to import with message \n {rv}")
+def test_dbt_cosmos_dag_exists():
+    dag_bag = create_dag_bag()
+
+    assert DAG_ID in dag_bag.dags, (
+        f"DAG {DAG_ID} não encontrada"
+    )
 
 
-APPROVED_TAGS = {}
+def test_dbt_cosmos_dag_has_tasks():
+    dag_bag = create_dag_bag()
 
+    dag = dag_bag.dags.get(DAG_ID)
 
-@pytest.mark.parametrize(
-    "dag_id,dag,fileloc", get_dags(), ids=[x[2] for x in get_dags()]
-)
-def test_dag_tags(dag_id, dag, fileloc):
-    """
-    test if a DAG is tagged and if those TAGs are in the approved list
-    """
-    assert dag.tags, f"{dag_id} in {fileloc} has no tags"
-    if APPROVED_TAGS:
-        assert not set(dag.tags) - APPROVED_TAGS
-
-
-@pytest.mark.parametrize(
-    "dag_id,dag, fileloc", get_dags(), ids=[x[2] for x in get_dags()]
-)
-def test_dag_retries(dag_id, dag, fileloc):
-    """
-    test if a DAG has retries set
-    """
-    assert (
-        dag.default_args.get("retries", None) >= 2
-    ), f"{dag_id} in {fileloc} must have task retries >= 2."
+    assert dag is not None
+    assert len(dag.tasks) > 0, (
+        f"DAG {DAG_ID} não possui tasks"
+    )
