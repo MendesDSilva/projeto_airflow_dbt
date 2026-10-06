@@ -39,3 +39,18 @@ jobs:
 
       - name: dbt test
         run: dbt test --project-dir dbt_airflow --profiles-dir dbt_airflow
+
+  airflow-ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Astro CLI
+        run: |
+          curl -sSL https://install.astronomer.io | sudo bash -s -- v1.45.0
+          astro version
+
+      - name: Test Airflow DAGs
+        run: astro dev pytest

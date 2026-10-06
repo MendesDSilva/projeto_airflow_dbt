@@ -8,18 +8,26 @@ on:
 jobs:
   dbt-delivery:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Prepare dbt project
+      - name: Prepare production artifact
         run: |
-          mkdir -p delivery
-          cp -r dbt_airflow delivery/  
-      
-      - name: Upload dbt artifact
+          mkdir -p delivery/.astro
+
+          cp -r dags delivery/
+          cp -r dbt_airflow delivery/
+
+          cp Dockerfile delivery/
+          cp requirements.txt delivery/
+          cp packages.txt delivery/
+          cp airflow_settings.yaml delivery/
+          cp .astro/config.yaml delivery/.astro/
+
+      - name: Upload production artifact
         uses: actions/upload-artifact@v4
         with:
-          name: dbt-production
-          path: delivery/dbt_airflow
+          name: airflow-dbt-production
+          path: delivery
